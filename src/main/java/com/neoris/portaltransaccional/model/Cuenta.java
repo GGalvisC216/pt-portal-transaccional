@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Getter @Setter @NoArgsConstructor
@@ -36,5 +37,9 @@ public class Cuenta {
     @JsonIgnoreProperties("cuentas")
     @JoinColumn(name = "id_cliente", insertable = false, updatable = false)
     private Cliente cliente;
+
+    @OneToMany(mappedBy = "cuenta")
+    @JsonIgnoreProperties("cuenta")
+    private List<Movimiento> movimientos;
 
 }

@@ -1,7 +1,6 @@
 package com.neoris.portaltransaccional.controller;
 
 import com.neoris.portaltransaccional.model.Cliente;
-import com.neoris.portaltransaccional.model.Persona;
 import com.neoris.portaltransaccional.service.ClienteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
