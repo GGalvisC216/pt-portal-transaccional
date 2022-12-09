@@ -39,7 +39,7 @@ public class MovimientoController {
     public ResponseEntity guardarMovimiento(@RequestBody Movimiento movimiento) {
         Movimiento resultado = movimientoService.guardarMovimiento(movimiento);
         if (resultado != null) {
-            return new ResponseEntity(HttpStatus.CREATED);
+            return new ResponseEntity(resultado, HttpStatus.CREATED);
         } else {
             return new ResponseEntity("Saldo no disponible", HttpStatus.BAD_REQUEST);
         }
