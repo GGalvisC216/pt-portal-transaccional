@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -36,12 +37,12 @@ public class CuentaController {
     }
 
     @PostMapping()
-    public ResponseEntity guardarCuenta(@RequestBody Cuenta cuenta) {
+    public ResponseEntity guardarCuenta(@Valid @RequestBody Cuenta cuenta) {
         return new ResponseEntity(cuentaService.guardarCuenta(cuenta), HttpStatus.CREATED);
     }
 
     @PutMapping()
-    public ResponseEntity actualizarCuenta(@RequestBody Cuenta cuenta) {
+    public ResponseEntity actualizarCuenta(@Valid @RequestBody Cuenta cuenta) {
         Cuenta resultado = cuentaService.actualizarCuenta(cuenta);
         if (resultado != null) {
             return new ResponseEntity<>(resultado, HttpStatus.OK);

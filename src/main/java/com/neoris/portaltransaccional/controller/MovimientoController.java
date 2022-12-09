@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -36,7 +37,7 @@ public class MovimientoController {
     }
 
     @PostMapping()
-    public ResponseEntity guardarMovimiento(@RequestBody Movimiento movimiento) {
+    public ResponseEntity guardarMovimiento(@Valid @RequestBody Movimiento movimiento) {
         Movimiento resultado = movimientoService.guardarMovimiento(movimiento);
         if (resultado != null) {
             return new ResponseEntity(resultado, HttpStatus.CREATED);
@@ -46,7 +47,7 @@ public class MovimientoController {
     }
 
     @PutMapping()
-    public ResponseEntity actualizarMovimiento(@RequestBody Movimiento movimiento) {
+    public ResponseEntity actualizarMovimiento(@Valid @RequestBody Movimiento movimiento) {
         Movimiento resultado = movimientoService.actualizarMovimiento(movimiento);
         if (resultado != null) {
             return new ResponseEntity(resultado, HttpStatus.OK);
