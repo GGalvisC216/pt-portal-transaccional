@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.neoris</groupId>
 	<artifactId>portal-transaccional</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>portal-transaccional</name>
 	<description>Proyecto API Portal Transaccional</description>
 	<properties>
