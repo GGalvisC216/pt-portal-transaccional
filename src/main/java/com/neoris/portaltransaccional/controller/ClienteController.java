@@ -20,12 +20,12 @@ public class ClienteController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Persona>> obtenerTodosLosClientes() {
+    public ResponseEntity obtenerTodosLosClientes() {
         return new ResponseEntity<>(clienteService.obtenerTodosLosClientes(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Persona> obtenerClientePorId (@PathVariable Integer id) {
+    public ResponseEntity obtenerClientePorId (@PathVariable Integer id) {
         return clienteService.obtenerClientePorId(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(()->ResponseEntity.noContent().build());
