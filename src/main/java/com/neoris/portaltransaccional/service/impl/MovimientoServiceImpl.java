@@ -46,7 +46,6 @@ public class MovimientoServiceImpl implements MovimientoService {
             return null;
         }
         movimiento.setSaldo(valor);
-        movimiento.setFecha(LocalDateTime.now());
         return movimientoRepository.save(movimiento);
     }
 
