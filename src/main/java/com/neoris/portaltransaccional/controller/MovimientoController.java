@@ -25,7 +25,7 @@ public class MovimientoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity obtenerMovimientoPorId(@PathVariable("id") Integer idMovimiento) {
+    public ResponseEntity<Movimiento> obtenerMovimientoPorId(@PathVariable("id") Integer idMovimiento) {
         return movimientoService.obtenerMovimientoPorId(idMovimiento)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.noContent().build());
@@ -37,18 +37,13 @@ public class MovimientoController {
     }
 
     @PostMapping()
-    public ResponseEntity guardarMovimiento(@Valid @RequestBody Movimiento movimiento) throws Exception {
-        Movimiento resultado = movimientoService.guardarMovimiento(movimiento);
-        if (resultado != null) {
-            return new ResponseEntity(resultado, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity("Saldo no disponible", HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<Movimiento> guardarMovimiento(@Valid @RequestBody Movimiento movimiento) throws Exception {
+        return new ResponseEntity<>(movimientoService.guardarMovimiento(movimiento), HttpStatus.CREATED);
     }
 
     @PutMapping()
-    public ResponseEntity actualizarMovimiento(@Valid @RequestBody Movimiento movimiento) throws Exception {
-        return new ResponseEntity(movimientoService.actualizarMovimiento(movimiento), HttpStatus.OK);
+    public ResponseEntity<Movimiento> actualizarMovimiento(@Valid @RequestBody Movimiento movimiento) throws Exception {
+        return new ResponseEntity<>(movimientoService.actualizarMovimiento(movimiento), HttpStatus.OK);
 
     }
 

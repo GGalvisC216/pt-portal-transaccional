@@ -39,18 +39,13 @@ public class CuentaController {
     }
 
     @PostMapping()
-    public ResponseEntity guardarCuenta(@Valid @RequestBody Cuenta cuenta) throws ClientNotFoundException {
-        return new ResponseEntity(cuentaService.guardarCuenta(cuenta), HttpStatus.CREATED);
+    public ResponseEntity<Cuenta> guardarCuenta(@Valid @RequestBody Cuenta cuenta) throws ClientNotFoundException {
+        return new ResponseEntity<>(cuentaService.guardarCuenta(cuenta), HttpStatus.CREATED);
     }
 
     @PutMapping()
-    public ResponseEntity actualizarCuenta(@Valid @RequestBody Cuenta cuenta) throws AccountNotFoundException {
-        Cuenta resultado = cuentaService.actualizarCuenta(cuenta);
-        if (resultado != null) {
-            return new ResponseEntity<>(resultado, HttpStatus.OK);
-        } else {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Cuenta> actualizarCuenta(@Valid @RequestBody Cuenta cuenta) throws AccountNotFoundException {
+        return new ResponseEntity<>(cuentaService.actualizarCuenta(cuenta), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
