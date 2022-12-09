@@ -13,9 +13,9 @@ public interface MovimientoService {
 
     Optional<Movimiento> obtenerMovimientoPorId(Integer idMovimiento);
 
-    Movimiento guardarMovimiento(Movimiento movimiento);
+    Movimiento guardarMovimiento(Movimiento movimiento) throws Exception;
 
-    Movimiento actualizarMovimiento(Movimiento movimiento);
+    Movimiento actualizarMovimiento(Movimiento movimiento) throws Exception;
 
     boolean borrarMovimiento(Integer idMovimiento);
 

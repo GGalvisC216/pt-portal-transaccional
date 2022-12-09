@@ -1,9 +1,11 @@
 package com.neoris.portaltransaccional.service.impl;
 
+import com.neoris.portaltransaccional.exception.ClientAlreadyExistsException;
 import com.neoris.portaltransaccional.model.Cliente;
 import com.neoris.portaltransaccional.model.Persona;
 import com.neoris.portaltransaccional.repository.ClienteRepository;
 import com.neoris.portaltransaccional.service.ClienteService;
+import com.neoris.portaltransaccional.exception.ClientNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,8 +31,13 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Cliente guardarCliente(Cliente cliente) {
-        return clienteRepository.save(cliente);
+    public Cliente guardarCliente(Cliente cliente) throws ClientAlreadyExistsException {
+        Cliente clienteDB = clienteRepository.findByIdentificacion(cliente.getIdentificacion()).orElse(null);
+        if (clienteDB == null) {
+            return clienteRepository.save(cliente);
+        } else {
+            throw new ClientAlreadyExistsException();
+        }
     }
 
     @Override
@@ -43,10 +50,10 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Cliente actualizarCliente(Cliente cliente) {
+    public Cliente actualizarCliente(Cliente cliente) throws ClientNotFoundException {
         return obtenerClientePorId(cliente.getIdPersona()).map(
                 clienteBD -> {
                     return clienteRepository.save(cliente);
-                }).orElse(null);
+                }).orElseThrow(ClientNotFoundException::new);
     }
 }

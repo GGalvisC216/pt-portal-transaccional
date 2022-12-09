@@ -1,13 +1,14 @@
 package com.neoris.portaltransaccional.controller;
 
+import com.neoris.portaltransaccional.exception.ClientAlreadyExistsException;
 import com.neoris.portaltransaccional.model.Cliente;
 import com.neoris.portaltransaccional.service.ClienteService;
+import com.neoris.portaltransaccional.exception.ClientNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("clientes")
@@ -32,12 +33,12 @@ public class ClienteController {
     }
 
     @PostMapping()
-    public ResponseEntity guardarCliente(@Valid @RequestBody Cliente cliente) {
+    public ResponseEntity guardarCliente(@Valid @RequestBody Cliente cliente) throws ClientAlreadyExistsException {
         return new ResponseEntity(clienteService.guardarCliente(cliente), HttpStatus.CREATED);
     }
 
     @PutMapping()
-    public ResponseEntity actualizarCliente(@Valid @RequestBody Cliente cliente) {
+    public ResponseEntity actualizarCliente(@Valid @RequestBody Cliente cliente) throws ClientNotFoundException {
         Cliente resultado = clienteService.actualizarCliente(cliente);
         if (resultado != null) {
             return new ResponseEntity(resultado, HttpStatus.OK);

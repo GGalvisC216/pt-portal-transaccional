@@ -1,10 +1,15 @@
 package com.neoris.portaltransaccional.service.impl;
 
+import com.neoris.portaltransaccional.exception.AccountNotFoundException;
+import com.neoris.portaltransaccional.exception.BalanceLowerThanZeroException;
+import com.neoris.portaltransaccional.exception.TransactionConflictException;
+import com.neoris.portaltransaccional.exception.TransactionNotFoundException;
 import com.neoris.portaltransaccional.model.Movimiento;
 import com.neoris.portaltransaccional.repository.CuentaRepository;
 import com.neoris.portaltransaccional.repository.MovimientoRepository;
 import com.neoris.portaltransaccional.service.MovimientoService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.text.html.Option;
 import java.math.BigDecimal;
@@ -39,27 +44,41 @@ public class MovimientoServiceImpl implements MovimientoService {
     }
 
     @Override
-    public Movimiento guardarMovimiento(Movimiento movimiento) {
+    public Movimiento guardarMovimiento(Movimiento movimiento) throws Exception{
         BigDecimal valorInicial = obtenerSaldoCuenta(movimiento.getIdCuenta());
+        if (valorInicial == null) {
+            throw new AccountNotFoundException();
+        }
+
         BigDecimal valor = operarTransaccion(valorInicial, movimiento.getValor(), movimiento.getTipoMovimiento());
         if (valor.compareTo(BigDecimal.ZERO) < 0) {
-            return null;
+            throw new BalanceLowerThanZeroException();
         }
         movimiento.setSaldo(valor);
         return movimientoRepository.save(movimiento);
     }
 
     @Override
-    public Movimiento actualizarMovimiento(Movimiento movimiento) {
-        return movimientoRepository.findFirstByIdCuentaOrderByIdMovimientoDesc(movimiento.getIdCuenta())
+    @Transactional
+    public Movimiento actualizarMovimiento(Movimiento movimiento) throws Exception{
+        cuentaRepository.findById(movimiento.getIdCuenta()).orElseThrow(AccountNotFoundException::new);
+        movimientoRepository.findById(movimiento.getIdMovimiento()).orElseThrow(TransactionNotFoundException::new);
+
+        Movimiento resultado = movimientoRepository.findFirstByIdCuentaOrderByIdMovimientoDesc(movimiento.getIdCuenta())
                 .map(movimientoDB -> {
                     if (movimientoDB.getIdMovimiento().equals(movimiento.getIdMovimiento())) {
                         borrarMovimiento(movimiento.getIdMovimiento());
-                        return guardarMovimiento(movimiento);
+                        try {
+                            return guardarMovimiento(movimiento);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
                     } else {
                         return null;
                     }
                 }).orElse(null);
+        if (resultado != null) return resultado;
+        else throw new TransactionConflictException();
     }
 
     @Override

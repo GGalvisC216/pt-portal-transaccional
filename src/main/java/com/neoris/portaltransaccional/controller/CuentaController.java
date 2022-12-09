@@ -2,6 +2,8 @@ package com.neoris.portaltransaccional.controller;
 
 import com.neoris.portaltransaccional.model.Cuenta;
 import com.neoris.portaltransaccional.service.CuentaService;
+import com.neoris.portaltransaccional.exception.AccountNotFoundException;
+import com.neoris.portaltransaccional.exception.ClientNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,12 +39,12 @@ public class CuentaController {
     }
 
     @PostMapping()
-    public ResponseEntity guardarCuenta(@Valid @RequestBody Cuenta cuenta) {
+    public ResponseEntity guardarCuenta(@Valid @RequestBody Cuenta cuenta) throws ClientNotFoundException {
         return new ResponseEntity(cuentaService.guardarCuenta(cuenta), HttpStatus.CREATED);
     }
 
     @PutMapping()
-    public ResponseEntity actualizarCuenta(@Valid @RequestBody Cuenta cuenta) {
+    public ResponseEntity actualizarCuenta(@Valid @RequestBody Cuenta cuenta) throws AccountNotFoundException {
         Cuenta resultado = cuentaService.actualizarCuenta(cuenta);
         if (resultado != null) {
             return new ResponseEntity<>(resultado, HttpStatus.OK);
